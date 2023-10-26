@@ -1,10 +1,9 @@
 package com.example.blogchipo.response;
 
-import com.example.blogchipo.entityMX.CrawlerData;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
+
 
 @Data
 public class Response<T> implements Serializable {
