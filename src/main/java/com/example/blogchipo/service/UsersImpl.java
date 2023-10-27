@@ -7,6 +7,7 @@ import com.example.blogchipo.until.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -66,4 +67,5 @@ public class UsersImpl implements UserService {
             throw new UserException("user already exist with the same mail id");
         }
     }
+
 }
