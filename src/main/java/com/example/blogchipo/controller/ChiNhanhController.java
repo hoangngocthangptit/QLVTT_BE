@@ -1,6 +1,7 @@
 package com.example.blogchipo.controller;
 
 import com.example.blogchipo.entity.ChiNhanh;
+import com.example.blogchipo.entity.Kho;
 import com.example.blogchipo.repository.ChiNhanhRepository;
 import com.example.blogchipo.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,15 @@ public class ChiNhanhController {
         repository.deleteById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("Xóa thành công", 200, repository.findById(id)));
+    }
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Response> updateCategory(@PathVariable Long id, @RequestBody ChiNhanh data) {
+        ChiNhanh kho = repository.findById(id).get();
+        kho.setChiNhanh(data.getChiNhanh());
+        kho.setDiaChi(data.getDiaChi());
+        kho.setSDT(data.getSDT());
+        repository.save(kho);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new Response("Sửa thành công", 200, kho));
     }
 }
