@@ -10,6 +10,7 @@ import com.example.blogchipo.until.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class UsersController {
     private UserService userServices;
     @Autowired
     private JwtGenerator generate;
+    @Autowired
+    private BCryptPasswordEncoder encryption;
     @PostMapping("/registration")
     @ResponseBody
     public ResponseEntity<Response> registration(@RequestBody Users information) {
@@ -42,7 +45,7 @@ public class UsersController {
     @PostMapping("/user/login")
     public ResponseEntity<UsersDetailRes> login(@RequestBody Users information) {
         Users users = userServices.login(information);
-        if (users != null&& users.isVerified()==true) {
+        if (users != null&& users.isTrangThai()==true) {
             String token = generate.jwtToken(users.getUserId());
             return ResponseEntity.status(HttpStatus.ACCEPTED).header("login successfull", information.getEmail())
                     .body(new UsersDetailRes(token, 200, users));
@@ -60,11 +63,11 @@ public class UsersController {
     @GetMapping("isVerified/{userId}")
     public ResponseEntity<Response> activeUser(@PathVariable long userId) {
         Users user = repository.findById(userId).get();
-        if(user.isVerified()==false) {
-            user.setVerified(true);
+        if(user.isTrangThai()==false) {
+            user.setTrangThai(true);
         }
         else {
-            user.setVerified(false);
+            user.setTrangThai(false);
         }
         repository.save(user);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
@@ -80,6 +83,22 @@ public class UsersController {
     @GetMapping("DetailUser/{userId}")
     public ResponseEntity<Response> detailUser(@PathVariable long userId) {
         Users user = repository.findById(userId).get();
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new Response("detail", 200, user));
+    }
+    @PutMapping("user/edit/{userId}")
+    public ResponseEntity<Response> editUser(@RequestBody Users info, @PathVariable long userId) {
+        Users user = repository.findById(userId).get();
+        user.setRole(info.getRole());
+        user.setTrangThai(info.isTrangThai());
+        user.setHoTen(info.getHoTen());
+        user.setSdt(info.getSdt());
+        if(info.getPassword()!= null){
+            String epassword = encryption.encode(info.getPassword());
+            // setting the some extra information and encrypting the password
+            user.setPassword(epassword);
+        }
+        repository.save(user);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("detail", 200, user));
     }

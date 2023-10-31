@@ -7,11 +7,9 @@ import com.example.blogchipo.until.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 @Service
 public class UsersImpl implements UserService {
     @Autowired
@@ -31,7 +29,7 @@ public class UsersImpl implements UserService {
         if (user != null) {
 //            String userRole = information.getRole();
 //            String fetchRole = user.getRole();
-            if ((user.isVerified() == true)) {
+            if ((user.isTrangThai() == true)) {
                     if (encryption.matches(information.getPassword(), user.getPassword())) {
                     System.out.println(generate.jwtToken(user.getUserId()));
                     return user;
@@ -53,12 +51,11 @@ public class UsersImpl implements UserService {
         Users user = repository.findByEmail(information.getEmail());
         if (user == null) {
             users = modelMapper.map(information, Users.class);
-            users.setCreatedDate(LocalDateTime.now());
             String epassword = encryption.encode(information.getPassword());
             // setting the some extra information and encrypting the password
             users.setPassword(epassword);
             System.out.println("password is" + epassword);
-            users.setVerified(true);
+            users.setTrangThai(true);
             // calling the save method
             users.setRole("admin");
             users = repository.save(users);
