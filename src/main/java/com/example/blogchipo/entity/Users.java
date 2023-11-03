@@ -12,6 +12,8 @@ public class Users {
     private long userId;
     @Nationalized
     private String hoTen;
+    @Nationalized
+    private String maNV;
     private String email;
     private String password;
     private Long sdt;

@@ -1,7 +1,7 @@
 package com.example.blogchipo.repository;
 
-import com.example.blogchipo.entity.ChiNhanh;
+import com.example.blogchipo.entity.ChiNhanhEntity;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ChiNhanhRepository  extends CrudRepository<ChiNhanh, Long> {
+public interface ChiNhanhRepository  extends CrudRepository<ChiNhanhEntity, String> {
 }

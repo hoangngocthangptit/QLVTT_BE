@@ -11,22 +11,22 @@ import org.hibernate.annotations.Nationalized;
 @Getter
 @Setter
 @Entity
-@Table(name = "NhaCungCap")
-public class NhaCungCapEntity {
+@Table(name = "ChiNhanh")
+public class ChiNhanhEntity {
     @Id
     @Nationalized
-    @Column(name = "MaNCC", nullable = false)
-    private String maNCC;
+    @Column(name = "MaCN", nullable = false)
+    private String maCN;
 
     @Nationalized
-    @Column(name = "TenNCC")
-    private String tenNCC;
+    @Column(name = "ChiNhanh")
+    private String chiNhanh;
 
     @Nationalized
     @Column(name = "DiaChi")
     private String diaChi;
 
-    @Nationalized
     @Column(name = "SDT", length = 15)
     private String sdt;
+
 }

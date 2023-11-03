@@ -1,9 +1,9 @@
 package com.example.blogchipo.controller;
 
-import com.example.blogchipo.entity.ChiNhanh;
-import com.example.blogchipo.entity.Kho;
+import com.example.blogchipo.entity.KhoEntity;
 import com.example.blogchipo.repository.KhoRepository;
 import com.example.blogchipo.response.Response;
+import com.example.blogchipo.until.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,26 +18,32 @@ public class KhoController {
     @Autowired
     private KhoRepository repository;
 
+    @Autowired
+    CommonUtils commonUtils;
+
     @GetMapping("")
     public ResponseEntity<Response> getAll() {
-        List<Kho> dsKho = (List<Kho>) repository.findAll();
+        List<KhoEntity> dsKho = (List<KhoEntity>) repository.findAll();
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("thành công", 200, dsKho));
     }
     @PostMapping("/insert")
-    public ResponseEntity<Response> insert(@RequestBody Kho kho) {
+    public ResponseEntity<Response> insert(@RequestBody KhoEntity kho) {
+        if (kho.getMakho() == null) {
+            kho.setMakho(commonUtils.genRandomId("KHO"));
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("Thêm thành công", 200, repository.save(kho)));
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Response> insert(@PathVariable  Long id) {
+    public ResponseEntity<Response> insert(@PathVariable  String id) {
         repository.deleteById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("Xóa thành công", 200, repository.findById(id)));
     }
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Response> updateCategory(@PathVariable Long id, @RequestBody Kho data) {
-        Kho kho = repository.findById(id).get();
+    public ResponseEntity<Response> updateCategory(@PathVariable String id, @RequestBody KhoEntity data) {
+        KhoEntity kho = repository.findById(id).get();
         kho.setTenKho(data.getTenKho());
         kho.setDiaChi(data.getDiaChi());
         repository.save(kho);

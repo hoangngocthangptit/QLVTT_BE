@@ -1,21 +1,21 @@
 package com.example.blogchipo.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
-@Data
 @Table(name = "VatTu")
 public class VatTuEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Nationalized
     @Column(name = "MaVT", nullable = false)
-    private Integer id;
+    private String maVT;
 
     @Nationalized
     @Column(name = "TenVT")
@@ -27,4 +27,13 @@ public class VatTuEntity {
     @Column(name = "SoLuongTon")
     private Integer soLuongTon;
 
+    @Nationalized
+    @Column(name = "MaNCC")
+    private String maNCC;
+
+    @OneToMany(mappedBy = "vatTu")
+    private Set<CtpnEntity> ctpns;
+
+    @OneToMany(mappedBy = "vatTu")
+    private Set<CtpxEntity> ctpxs;
 }

@@ -1,7 +1,6 @@
 package com.example.blogchipo.controller;
 
-import com.example.blogchipo.entity.ChiNhanh;
-import com.example.blogchipo.entity.Kho;
+import com.example.blogchipo.entity.ChiNhanhEntity;
 import com.example.blogchipo.repository.ChiNhanhRepository;
 import com.example.blogchipo.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +19,29 @@ public class ChiNhanhController {
 
     @GetMapping("")
     public ResponseEntity<Response> getAll() {
-        List<ChiNhanh> users = (List<ChiNhanh>) repository.findAll();
+        List<ChiNhanhEntity> users = (List<ChiNhanhEntity>) repository.findAll();
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("thành công", 200, users));
     }
     @PostMapping("/insert")
-    public ResponseEntity<Response> insert(@RequestBody ChiNhanh chiNhanh) {
+    public ResponseEntity<Response> insert(@RequestBody ChiNhanhEntity chiNhanhEntity) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Thêm thành công", 200, repository.save(chiNhanh)));
+                .body(new Response("Thêm thành công", 200, repository.save(chiNhanhEntity)));
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Response> insert(@PathVariable  Long id) {
-        repository.deleteById(id);
+    public ResponseEntity<Response> insert(@PathVariable  String maCN) {
+        repository.deleteById(maCN);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Xóa thành công", 200, repository.findById(id)));
+                .body(new Response("Xóa thành công", 200, repository.findById(maCN)));
     }
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Response> updateCategory(@PathVariable Long id, @RequestBody ChiNhanh data) {
-        ChiNhanh kho = repository.findById(id).get();
-        kho.setChiNhanh(data.getChiNhanh());
-        kho.setDiaChi(data.getDiaChi());
-        kho.setSDT(data.getSDT());
-        repository.save(kho);
+    public ResponseEntity<Response> updateCategory(@PathVariable String id, @RequestBody ChiNhanhEntity data) {
+        ChiNhanhEntity chiNhanh = repository.findById(id).get();
+        chiNhanh.setChiNhanh(data.getChiNhanh());
+        chiNhanh.setDiaChi(data.getDiaChi());
+        chiNhanh.setSdt(data.getSdt());
+        repository.save(chiNhanh);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Sửa thành công", 200, kho));
+                .body(new Response("Sửa thành công", 200, chiNhanh));
     }
 }
