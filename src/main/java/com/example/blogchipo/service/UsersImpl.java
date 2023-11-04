@@ -2,6 +2,7 @@ package com.example.blogchipo.service;
 
 import com.example.blogchipo.entity.Users;
 import com.example.blogchipo.repository.UsersRepository;
+import com.example.blogchipo.until.CommonUtils;
 import com.example.blogchipo.until.JwtGenerator;
 import com.example.blogchipo.until.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class UsersImpl implements UserService {
     private ModelMapper modelMapper;
     @Autowired
     private JwtGenerator generate;
+    @Autowired
+    CommonUtils commonUtils;
     //    @Autowired
 //    private EmailProviderService em;
     private Users users = new Users();
@@ -58,6 +61,7 @@ public class UsersImpl implements UserService {
             users.setTrangThai(true);
             // calling the save method
             users.setRole("admin");
+            users.setMaNV(commonUtils.genRandomId("NV"));
             users = repository.save(users);
             return true;
         } else {
