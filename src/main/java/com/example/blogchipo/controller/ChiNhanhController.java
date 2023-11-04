@@ -3,6 +3,7 @@ package com.example.blogchipo.controller;
 import com.example.blogchipo.entity.ChiNhanhEntity;
 import com.example.blogchipo.repository.ChiNhanhRepository;
 import com.example.blogchipo.response.Response;
+import com.example.blogchipo.until.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ import java.util.List;
 public class ChiNhanhController {
     @Autowired
     private ChiNhanhRepository repository;
+    @Autowired
+    CommonUtils commonUtils;
+
 
     @GetMapping("")
     public ResponseEntity<Response> getAll() {
@@ -25,6 +29,9 @@ public class ChiNhanhController {
     }
     @PostMapping("/insert")
     public ResponseEntity<Response> insert(@RequestBody ChiNhanhEntity chiNhanhEntity) {
+        if (chiNhanhEntity.getMaCN() == null) {
+            chiNhanhEntity.setMaCN(commonUtils.genRandomId("CN"));
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("Thêm thành công", 200, repository.save(chiNhanhEntity)));
     }
