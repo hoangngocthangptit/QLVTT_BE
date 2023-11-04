@@ -5,11 +5,10 @@ import com.example.blogchipo.model.request.NewCTPNRequest;
 import com.example.blogchipo.model.request.NewCTPXRequest;
 import com.example.blogchipo.model.request.NewPhieuNhapRequest;
 import com.example.blogchipo.model.request.NewPhieuXuatRequest;
+import com.example.blogchipo.model.response.KhoResponse;
 import com.example.blogchipo.model.response.PhieuNhapResponse;
 import com.example.blogchipo.model.response.PhieuXuatResponse;
-import com.example.blogchipo.repository.PhieuNhapRepository;
-import com.example.blogchipo.repository.PhieuXuatRepository;
-import com.example.blogchipo.repository.VatTuRepository;
+import com.example.blogchipo.repository.*;
 import com.example.blogchipo.until.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,15 @@ public class AllServices {
 
     @Autowired
     VatTuRepository vatTuRepository;
+
+    @Autowired
+    ChiNhanhRepository chiNhanhRepository;
+
+    @Autowired
+    KhoRepository khoRepository;
+
+    @Autowired
+    UsersRepository usersRepository;
 
     @Autowired
     CommonUtils commonUtils;
@@ -51,7 +59,8 @@ public class AllServices {
             phieuNhapEntities = phieuNhapRepository.findAll();
         }
         for (PhieuNhapEntity phieuNhapEntity: phieuNhapEntities) {
-            dsPhieuNhap.add(new PhieuNhapResponse(phieuNhapEntity));
+            String tenKho = khoRepository.findById(phieuNhapEntity.getMaKho()).get().getTenKho();
+            dsPhieuNhap.add(new PhieuNhapResponse(phieuNhapEntity, tenKho));
         }
         return dsPhieuNhap;
     }
@@ -85,7 +94,7 @@ public class AllServices {
         }
         phieuNhapEntity.setCtpns(ctpnEntities);
         phieuNhapRepository.save(phieuNhapEntity);
-        return new PhieuNhapResponse(phieuNhapEntity);
+        return new PhieuNhapResponse(phieuNhapEntity, khoRepository.findById(phieuNhapEntity.getMaKho()).get().getTenKho());
     }
 
     public PhieuNhapResponse updatePhieuNhap(String maPN, NewPhieuNhapRequest newPhieuNhapRequest) {
@@ -115,7 +124,8 @@ public class AllServices {
         }
         phieuNhapEntity.setCtpns(ctpnEntities);
         phieuNhapRepository.save(phieuNhapEntity);
-        return new PhieuNhapResponse(phieuNhapEntity);
+        String tenKho = khoRepository.findById(phieuNhapEntity.getMaKho()).get().getTenKho();
+        return new PhieuNhapResponse(phieuNhapEntity, tenKho);
     }
 
     public List<PhieuXuatResponse> getAllPhieuXuat(String maPN, String maNV, String maKho, String ngay) {
@@ -137,7 +147,7 @@ public class AllServices {
             phieuXuatEntities = phieuXuatRepository.findAll();
         }
         for (PhieuXuatEntity phieuXuatEntity: phieuXuatEntities) {
-            dsPhieuXuat.add(new PhieuXuatResponse(phieuXuatEntity));
+            dsPhieuXuat.add(new PhieuXuatResponse(phieuXuatEntity, khoRepository.findById(phieuXuatEntity.getMaKho()).get().getTenKho()));
         }
         return dsPhieuXuat;
     }
@@ -171,7 +181,7 @@ public class AllServices {
         }
         phieuXuatEntity.setCtpx(ctpxEntities);
         phieuXuatRepository.save(phieuXuatEntity);
-        return new PhieuXuatResponse(phieuXuatEntity);
+        return new PhieuXuatResponse(phieuXuatEntity, khoRepository.findById(phieuXuatEntity.getMaKho()).get().getTenKho());
     }
 
     public PhieuXuatResponse updatePhieuXuat(String id, NewPhieuXuatRequest data) {
@@ -201,6 +211,28 @@ public class AllServices {
         }
         phieuXuatEntity.setCtpx(ctpxEntities);
         phieuXuatRepository.save(phieuXuatEntity);
-        return new PhieuXuatResponse(phieuXuatEntity);
+        return new PhieuXuatResponse(phieuXuatEntity, khoRepository.findById(phieuXuatEntity.getMaKho()).get().getTenKho());
+    }
+
+    public void deleteChiNhanh(String maCN) {
+        // if any NhanVien or Kho is using this ChiNhanh, throw exception
+        Optional<Users> users = usersRepository.findByMaCN(maCN);
+        if (users.isPresent()) {
+            throw new RuntimeException("Chi nhánh đang được sử dụng");
+        }
+        Optional<KhoEntity> kho = khoRepository.findByMaCN(maCN);
+        if (kho.isPresent()) {
+            throw new RuntimeException("Chi nhánh đang được sử dụng");
+        }
+        chiNhanhRepository.deleteById(maCN);
+    }
+
+    public List<KhoResponse> getAllKho() {
+        List<KhoResponse> dsKho = new ArrayList<>();
+        List<KhoEntity> khoEntities = (List<KhoEntity>) khoRepository.findAll();
+        for (KhoEntity khoEntity: khoEntities) {
+            dsKho.add(new KhoResponse(khoEntity, chiNhanhRepository.findById(khoEntity.getMaCN()).get().getChiNhanh()));
+        }
+        return dsKho;
     }
 }

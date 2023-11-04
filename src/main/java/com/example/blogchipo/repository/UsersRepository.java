@@ -8,10 +8,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface UsersRepository extends CrudRepository<Users, Long> {
     Users findByEmail(String email);
     @Query(value = "select * from NhanVien u where ?1 is null or hoTen like %?1%", nativeQuery = true)
     Page<Users> GetAll(String name, Pageable pageable);
     List<Users> findByHoTen(String name);
+
+    Optional<Users> findByMaCN(String maCN);
 }

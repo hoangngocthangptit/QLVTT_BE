@@ -1,8 +1,10 @@
 package com.example.blogchipo.controller;
 
 import com.example.blogchipo.entity.KhoEntity;
+import com.example.blogchipo.model.response.KhoResponse;
 import com.example.blogchipo.repository.KhoRepository;
 import com.example.blogchipo.response.Response;
+import com.example.blogchipo.service.AllServices;
 import com.example.blogchipo.until.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +21,14 @@ public class KhoController {
     private KhoRepository repository;
 
     @Autowired
+    AllServices allServices;
+
+    @Autowired
     CommonUtils commonUtils;
 
     @GetMapping("")
     public ResponseEntity<Response> getAll() {
-        List<KhoEntity> dsKho = (List<KhoEntity>) repository.findAll();
+        List<KhoResponse> dsKho = allServices.getAllKho();
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("thành công", 200, dsKho));
     }

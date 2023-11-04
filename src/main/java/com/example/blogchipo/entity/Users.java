@@ -19,5 +19,6 @@ public class Users {
     private Long sdt;
     private boolean trangThai;
     private String role;
+    private String maCN;
 
 }
