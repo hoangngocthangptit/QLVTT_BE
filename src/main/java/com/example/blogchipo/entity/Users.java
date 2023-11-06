@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.Set;
+
 @Entity
 @Data
 @Table(name = "NhanVien")
@@ -19,5 +21,4 @@ public class Users {
     private Long sdt;
     private boolean trangThai;
     private String role;
-
 }
