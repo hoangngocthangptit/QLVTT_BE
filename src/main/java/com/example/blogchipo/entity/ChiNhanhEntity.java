@@ -1,12 +1,13 @@
 package com.example.blogchipo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,5 +29,7 @@ public class ChiNhanhEntity {
 
     @Column(name = "SDT", length = 15)
     private String sdt;
+    @OneToMany(mappedBy = "maCN", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<Users> listUsers = new LinkedHashSet<>();
 
 }

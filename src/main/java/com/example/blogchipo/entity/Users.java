@@ -1,6 +1,8 @@
 package com.example.blogchipo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Set;
@@ -21,4 +23,8 @@ public class Users {
     private Long sdt;
     private boolean trangThai;
     private String role;
+    @ManyToOne()
+    @MapsId("maCN")
+    @JoinColumn(name = "maCN")
+    private ChiNhanhEntity maCN;
 }

@@ -20,15 +20,18 @@ public class PhieuXuatResponse {
     private String ngay;
     @JsonProperty("maKho")
     private String maKho;
+    @JsonProperty("tenKho")
+    private String tenKho;
     @JsonProperty("maNV")
     private String maNV;
     @JsonProperty("ctpx")
     private List<NewCTPXRequest> ctpx = new ArrayList<>();
 
-    public PhieuXuatResponse(PhieuXuatEntity phieuXuatEntity) {
+    public PhieuXuatResponse(PhieuXuatEntity phieuXuatEntity, String tenKho) {
         this.maPN = phieuXuatEntity.getMaPX();
         this.ngay = phieuXuatEntity.getNgay().toString();
         this.maKho = phieuXuatEntity.getMaKho();
+        this.tenKho = tenKho;
         this.maNV = phieuXuatEntity.getMaNV();
         for (CtpxEntity ctpxEntity: phieuXuatEntity.getCtpx()) {
             NewCTPXRequest newCTPXRequest = new NewCTPXRequest();
