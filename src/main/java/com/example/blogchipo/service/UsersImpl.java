@@ -1,6 +1,8 @@
 package com.example.blogchipo.service;
 
+import com.example.blogchipo.entity.ChiNhanhEntity;
 import com.example.blogchipo.entity.Users;
+import com.example.blogchipo.repository.ChiNhanhRepository;
 import com.example.blogchipo.repository.UsersRepository;
 import com.example.blogchipo.until.CommonUtils;
 import com.example.blogchipo.until.JwtGenerator;
@@ -21,6 +23,8 @@ public class UsersImpl implements UserService {
     private ModelMapper modelMapper;
     @Autowired
     private JwtGenerator generate;
+    @Autowired
+    private ChiNhanhRepository chiNhanhRepository;
     @Autowired
     CommonUtils commonUtils;
     //    @Autowired
@@ -61,11 +65,14 @@ public class UsersImpl implements UserService {
             users.setTrangThai(true);
             // calling the save method
             users.setRole("admin");
+            // chi nhánh tự cấu hình
+            ChiNhanhEntity chiNhanh = chiNhanhRepository.findByMaCN("CN0001");
+            users.setMaCN(chiNhanh);
             users.setMaNV(commonUtils.genRandomId("NV"));
             users = repository.save(users);
             return true;
         } else {
-            throw new UserException("user already exist with the same mail id");
+            throw new UserException("Tồn tại tài khoản có email này rồi");
         }
     }
 

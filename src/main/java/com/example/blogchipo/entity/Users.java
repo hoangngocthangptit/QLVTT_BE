@@ -23,8 +23,7 @@ public class Users {
     private Long sdt;
     private boolean trangThai;
     private String role;
-    @ManyToOne()
-    @MapsId("maCN")
-    @JoinColumn(name = "maCN")
+    @ManyToOne
+    @JoinColumn(name = "maCN", referencedColumnName = "maCN", nullable = false)
     private ChiNhanhEntity maCN;
 }

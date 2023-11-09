@@ -16,7 +16,7 @@ import java.util.Set;
 public class ChiNhanhEntity {
     @Id
     @Nationalized
-    @Column(name = "MaCN", nullable = false)
+    @Column(name = "maCN", nullable = false)
     private String maCN;
 
     @Nationalized
@@ -29,7 +29,5 @@ public class ChiNhanhEntity {
 
     @Column(name = "SDT", length = 15)
     private String sdt;
-    @OneToMany(mappedBy = "maCN", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Collection<Users> listUsers = new LinkedHashSet<>();
 
 }
