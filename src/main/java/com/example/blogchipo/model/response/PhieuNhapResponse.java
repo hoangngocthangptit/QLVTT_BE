@@ -35,8 +35,8 @@ public class PhieuNhapResponse {
         for (CtpnEntity ctpnEntity: phieuNhapEntity.getCtpns()) {
             NewCTPNRequest newCTPNRequest1 = new NewCTPNRequest();
             newCTPNRequest1.setMaVT(ctpnEntity.getId().getMaVT());
-            newCTPNRequest1.setSoLuong(ctpnEntity.getSoluong().toString());
-            newCTPNRequest1.setDonGia(ctpnEntity.getDongia().toString());
+            newCTPNRequest1.setSoLuong(ctpnEntity.getSoluong());
+            newCTPNRequest1.setDonGia(ctpnEntity.getDongia());
             this.ctpn.add(newCTPNRequest1);
         }
     }

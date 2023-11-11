@@ -79,10 +79,9 @@ public class AllServices {
             if (vatTuEntity.isEmpty()) {
                 throw new RuntimeException("Vật tư không tồn tại");
             }
-
             CtpnEntity ctpnEntity = new CtpnEntity();
-            ctpnEntity.setDongia(Double.parseDouble(newCTPNRequest.getDonGia()));
-            ctpnEntity.setSoluong(Integer.parseInt(newCTPNRequest.getSoLuong()));
+            ctpnEntity.setDongia(newCTPNRequest.getDonGia());
+            ctpnEntity.setSoluong(newCTPNRequest.getSoLuong());
             CtpnEntityId ctpnEntityId = new CtpnEntityId();
             ctpnEntityId.setMaPN(maPN);
             ctpnEntityId.setMaVT(maVT);
@@ -111,8 +110,8 @@ public class AllServices {
             }
 
             CtpnEntity ctpnEntity = new CtpnEntity();
-            ctpnEntity.setDongia(Double.parseDouble(newCTPNRequest.getDonGia()));
-            ctpnEntity.setSoluong(Integer.parseInt(newCTPNRequest.getSoLuong()));
+            ctpnEntity.setDongia(newCTPNRequest.getDonGia());
+            ctpnEntity.setSoluong(newCTPNRequest.getSoLuong());
             CtpnEntityId ctpnEntityId = new CtpnEntityId();
             ctpnEntityId.setMaPN(maPN);
             ctpnEntityId.setMaVT(maVT);
