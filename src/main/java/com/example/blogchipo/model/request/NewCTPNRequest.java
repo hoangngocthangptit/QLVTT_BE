@@ -10,7 +10,7 @@ public class NewCTPNRequest {
     @JsonProperty("maVT")
     private String maVT;
     @JsonProperty("soLuong")
-    private String soLuong;
+    private Integer soLuong;
     @JsonProperty("donGia")
-    private String donGia;
+    private Double donGia;
 }
