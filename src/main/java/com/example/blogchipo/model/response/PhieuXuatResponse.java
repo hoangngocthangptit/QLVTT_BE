@@ -30,6 +30,8 @@ public class PhieuXuatResponse {
     @JsonProperty("totalValue")
     private Double totalValue;
 
+    @JsonProperty("total")
+    private Integer total;
     @JsonProperty("ctpx")
     private List<NewCTPXRequest> ctpx = new ArrayList<>();
 
@@ -40,6 +42,7 @@ public class PhieuXuatResponse {
         this.tenKho = tenKho;
         this.maNV = phieuXuatEntity.getMaNV();
         Double sum = 0.0;
+        Integer total = 0;
         for (CtpxEntity ctpxEntity: phieuXuatEntity.getCtpx()) {
             NewCTPXRequest newCTPXRequest = new NewCTPXRequest();
             newCTPXRequest.setMaVT(ctpxEntity.getId().getMaVT());
@@ -47,9 +50,11 @@ public class PhieuXuatResponse {
             newCTPXRequest.setDonGia(ctpxEntity.getDongia());
             this.ctpx.add(newCTPXRequest);
             sum += ctpxEntity.getDongia();
+            total += ctpxEntity.getSoluong();
         }
         this.totalValue = sum;
         this.vatTu = this.ctpx.stream().map(a->a.getMaVT()).collect(Collectors.joining(","));
+        this.total = total;
 
     }
 }

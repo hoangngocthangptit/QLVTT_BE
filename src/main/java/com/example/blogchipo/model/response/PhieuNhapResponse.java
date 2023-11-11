@@ -28,6 +28,8 @@ public class PhieuNhapResponse {
     private String vatTu;
     @JsonProperty("totalValue")
     private Double totalValue;
+    @JsonProperty("total")
+    private Integer total;
     @JsonProperty("ctpn")
     private List<NewCTPNRequest> ctpn = new ArrayList<>();
 
@@ -36,7 +38,8 @@ public class PhieuNhapResponse {
         this.ngay = phieuNhapEntity.getNgay().toString();
         this.maKho = phieuNhapEntity.getMaKho();
         this.tenKho = tenKho;
-        Double sum = 0.0;
+        Double sumPrice = 0.0;
+        Integer total = 0;
         this.maNV = phieuNhapEntity.getMaNV();
         for (CtpnEntity ctpnEntity: phieuNhapEntity.getCtpns()) {
             NewCTPNRequest newCTPNRequest1 = new NewCTPNRequest();
@@ -44,10 +47,11 @@ public class PhieuNhapResponse {
             newCTPNRequest1.setSoLuong(ctpnEntity.getSoluong());
             newCTPNRequest1.setDonGia(ctpnEntity.getDongia());
             this.ctpn.add(newCTPNRequest1);
-            sum += ctpnEntity.getDongia();
+            sumPrice += ctpnEntity.getDongia();
+            total += ctpnEntity.getSoluong();
         }
-        this.totalValue = sum;
+        this.totalValue = sumPrice;
         this.vatTu = this.ctpn.stream().map(a->a.getMaVT()).collect(Collectors.joining(","));
-
+        this.total = total;
     }
 }

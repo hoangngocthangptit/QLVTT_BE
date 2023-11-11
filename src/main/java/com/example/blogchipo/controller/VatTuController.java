@@ -59,6 +59,7 @@ public class VatTuController {
         vatTu.setTenVT(data.getTenVT());
         vatTu.setDvt(data.getDvt());
         vatTu.setSoLuongTon(data.getSoLuongTon());
+        vatTu.setMaNCC(data.getMaNCC());
         vatTuRepository.save(vatTu);
         VatTuResponse vatTuResponse = new VatTuResponse(vatTu);
         return ResponseEntity.status(HttpStatus.ACCEPTED)

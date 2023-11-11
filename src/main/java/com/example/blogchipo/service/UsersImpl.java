@@ -62,7 +62,7 @@ public class UsersImpl implements UserService {
             // setting the some extra information and encrypting the password
             users.setPassword(epassword);
             System.out.println("password is" + epassword);
-            users.setTrangThai(true);
+            users.setTrangThai(false);
             // calling the save method
             users.setRole("admin");
             // chi nhánh tự cấu hình

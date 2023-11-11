@@ -47,7 +47,7 @@ public class PhieuNhapController {
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(new Response("Thêm thành công", 200, allServices.addPhieuNhap(newPhieuNhapRequest)));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(new Response("Không được chọn 1 vật tư 2 lần", 400, null));
         }
     }
@@ -65,7 +65,7 @@ public class PhieuNhapController {
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(new Response("Sửa thành công", 200, allServices.updatePhieuNhap(id, data)));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(new Response("Không được chọn 1 vật tư 2 lần", 400, null));
         }
     }
