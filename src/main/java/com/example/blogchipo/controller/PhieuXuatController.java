@@ -1,8 +1,6 @@
 package com.example.blogchipo.controller;
 
-import com.example.blogchipo.model.request.NewPhieuNhapRequest;
 import com.example.blogchipo.model.request.NewPhieuXuatRequest;
-import com.example.blogchipo.model.response.PhieuNhapResponse;
 import com.example.blogchipo.model.response.PhieuXuatResponse;
 import com.example.blogchipo.repository.PhieuXuatRepository;
 import com.example.blogchipo.response.Response;
@@ -42,8 +40,14 @@ public class PhieuXuatController {
 
     @PostMapping("/insert")
     public ResponseEntity<Response> insertPhieuXuat(@RequestBody NewPhieuXuatRequest newPhieuXuatRequest) throws Exception {
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Thêm thành công", 200, allServices.addPhieuXuat(newPhieuXuatRequest)));
+        try {
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response("Thêm thành công", 200, allServices.addPhieuXuat(newPhieuXuatRequest)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Response("Không được chọn 1 vật tư 2 lần", 400, null));
+        }
+
     }
 
     @DeleteMapping("/delete/{maPX}")
@@ -55,7 +59,12 @@ public class PhieuXuatController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<Response> updatePhieuXuat(@PathVariable String id, @RequestBody NewPhieuXuatRequest data) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Sửa thành công", 200, allServices.updatePhieuXuat(id, data)));
+        try {
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response("Sửa thành công", 200, allServices.updatePhieuXuat(id, data)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Response("Không được chọn 1 vật tư 2 lần", 400, null));
+        }
     }
 }

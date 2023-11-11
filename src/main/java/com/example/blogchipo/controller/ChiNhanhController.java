@@ -41,10 +41,14 @@ public class ChiNhanhController {
     }
     @DeleteMapping("/delete/{maCN}")
     public ResponseEntity<Response> deleteChiNhanh(@PathVariable  String maCN) {
-//        repository.deleteById(maCN);
-        allServices.deleteChiNhanh(maCN);
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Xóa thành công", 200, null));
+        try {
+            allServices.deleteChiNhanh(maCN);
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response("Xóa thành công", 200, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Response(e.getMessage(), 400, null));
+        }
     }
     @PutMapping("/edit/{id}")
     public ResponseEntity<Response> updateCategory(@PathVariable String id, @RequestBody ChiNhanhEntity data) {
