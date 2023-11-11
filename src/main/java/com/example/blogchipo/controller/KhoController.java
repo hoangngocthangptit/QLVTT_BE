@@ -37,6 +37,7 @@ public class KhoController {
         if (kho.getMakho() == null) {
             kho.setMakho(commonUtils.genRandomId("KHO"));
         }
+        kho.setMaCN("CN0001");
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("Thêm thành công", 200, repository.save(kho)));
     }

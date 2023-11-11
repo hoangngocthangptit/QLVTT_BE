@@ -81,8 +81,8 @@ public class AllServices {
             }
 
             CtpnEntity ctpnEntity = new CtpnEntity();
-            ctpnEntity.setDongia(newCTPNRequest.getDonGia());
-            ctpnEntity.setSoluong(newCTPNRequest.getSoLuong());
+            ctpnEntity.setDongia(Double.parseDouble(newCTPNRequest.getDonGia()));
+            ctpnEntity.setSoluong(Integer.parseInt(newCTPNRequest.getSoLuong()));
             CtpnEntityId ctpnEntityId = new CtpnEntityId();
             ctpnEntityId.setMaPN(maPN);
             ctpnEntityId.setMaVT(maVT);
@@ -111,8 +111,8 @@ public class AllServices {
             }
 
             CtpnEntity ctpnEntity = new CtpnEntity();
-            ctpnEntity.setDongia(newCTPNRequest.getDonGia());
-            ctpnEntity.setSoluong(newCTPNRequest.getSoLuong());
+            ctpnEntity.setDongia(Double.parseDouble(newCTPNRequest.getDonGia()));
+            ctpnEntity.setSoluong(Integer.parseInt(newCTPNRequest.getSoLuong()));
             CtpnEntityId ctpnEntityId = new CtpnEntityId();
             ctpnEntityId.setMaPN(maPN);
             ctpnEntityId.setMaVT(maVT);

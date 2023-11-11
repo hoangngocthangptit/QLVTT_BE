@@ -10,6 +10,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,6 +25,11 @@ public class PhieuXuatResponse {
     private String tenKho;
     @JsonProperty("maNV")
     private String maNV;
+    @JsonProperty("vatTu")
+    private String vatTu;
+    @JsonProperty("totalValue")
+    private Double totalValue;
+
     @JsonProperty("ctpx")
     private List<NewCTPXRequest> ctpx = new ArrayList<>();
 
@@ -33,12 +39,17 @@ public class PhieuXuatResponse {
         this.maKho = phieuXuatEntity.getMaKho();
         this.tenKho = tenKho;
         this.maNV = phieuXuatEntity.getMaNV();
+        Double sum = 0.0;
         for (CtpxEntity ctpxEntity: phieuXuatEntity.getCtpx()) {
             NewCTPXRequest newCTPXRequest = new NewCTPXRequest();
             newCTPXRequest.setMaVT(ctpxEntity.getId().getMaVT());
             newCTPXRequest.setSoLuong(ctpxEntity.getSoluong());
             newCTPXRequest.setDonGia(ctpxEntity.getDongia());
             this.ctpx.add(newCTPXRequest);
+            sum += ctpxEntity.getDongia();
         }
+        this.totalValue = sum;
+        this.vatTu = this.ctpx.stream().map(a->a.getMaVT()).collect(Collectors.joining(","));
+
     }
 }

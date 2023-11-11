@@ -24,7 +24,7 @@ public class KhoEntity {
     private String diaChi;
 
     @Nationalized
-    @Column(name = "MaCN")
+    @Column(name = "maCN")
     private String maCN;
 
 }

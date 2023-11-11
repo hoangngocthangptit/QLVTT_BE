@@ -93,7 +93,7 @@ public class UsersController {
         user.setTrangThai(info.isTrangThai());
         user.setHoTen(info.getHoTen());
         user.setSdt(info.getSdt());
-        if(info.getPassword()!= null){
+        if(info.getPassword().length() <15 && !info.getPassword().isEmpty() ){
             String epassword = encryption.encode(info.getPassword());
             // setting the some extra information and encrypting the password
             user.setPassword(epassword);
