@@ -43,8 +43,13 @@ public class PhieuNhapController {
 
     @PostMapping("/insert")
     public ResponseEntity<Response> insertPhieuNhap(@RequestBody NewPhieuNhapRequest newPhieuNhapRequest) throws Exception {
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Thêm thành công", 200, allServices.addPhieuNhap(newPhieuNhapRequest)));
+        try {
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response("Thêm thành công", 200, allServices.addPhieuNhap(newPhieuNhapRequest)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Response("Không được chọn 1 vật tư 2 lần", 400, null));
+        }
     }
 
     @DeleteMapping("/delete/{maPN}")
@@ -56,7 +61,12 @@ public class PhieuNhapController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<Response> updatePhieuNhap(@PathVariable String id, @RequestBody NewPhieuNhapRequest data) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Sửa thành công", 200, allServices.updatePhieuNhap(id, data)));
+        try {
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response("Sửa thành công", 200, allServices.updatePhieuNhap(id, data)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Response("Không được chọn 1 vật tư 2 lần", 400, null));
+        }
     }
 }
