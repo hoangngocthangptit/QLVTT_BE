@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface PhieuNhapRepository extends JpaRepository<PhieuNhapEntity, String> {
     List<PhieuNhapEntity> findByMaNVIgnoreCase(String maNV);
@@ -14,4 +15,6 @@ public interface PhieuNhapRepository extends JpaRepository<PhieuNhapEntity, Stri
     List<PhieuNhapEntity> findByMaKhoIgnoreCase(String maKho);
 
     List<PhieuNhapEntity> findByNgay(LocalDate ngay);
+
+    List<PhieuNhapEntity> findByMaKho(String maKho);
 }

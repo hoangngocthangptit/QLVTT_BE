@@ -4,6 +4,7 @@ import com.example.blogchipo.entity.VatTuEntity;
 import com.example.blogchipo.model.response.VatTuResponse;
 import com.example.blogchipo.repository.VatTuRepository;
 import com.example.blogchipo.response.Response;
+import com.example.blogchipo.service.AllServices;
 import com.example.blogchipo.until.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,9 @@ import java.util.Optional;
 public class VatTuController {
     @Autowired
     private VatTuRepository vatTuRepository;
+
+    @Autowired
+    AllServices allServices;
 
     @Autowired
     CommonUtils commonUtils;
@@ -48,9 +52,14 @@ public class VatTuController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Response> insert(@PathVariable String id) {
-        vatTuRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Xóa thành công", 200, new VatTuEntity()));
+        try {
+            allServices.deleteVatTu(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response("Xóa thành công", 200, new VatTuEntity()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response(e.getMessage(), 400, null));
+        }
     }
 
     @PutMapping("/edit/{id}")

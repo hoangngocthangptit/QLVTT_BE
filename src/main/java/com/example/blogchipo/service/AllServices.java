@@ -234,4 +234,27 @@ public class AllServices {
         }
         return dsKho;
     }
+
+    public void deleteKho(String maKho) throws Exception {
+        List<PhieuNhapEntity> phieuNhap = phieuNhapRepository.findByMaKho(maKho);
+        if (!phieuNhap.isEmpty()) {
+            throw new RuntimeException("Kho đang được sử dụng (trong phiếu nhập)");
+        }
+        List<PhieuXuatEntity> phieuXuat = phieuXuatRepository.findByMaKho(maKho);
+        if (!phieuXuat.isEmpty()) {
+            throw new RuntimeException("Kho đang được sử dụng (trong phiếu xuất)");
+        }
+        khoRepository.deleteById(maKho);
+    }
+
+    public void deleteVatTu(String id) throws Exception {
+        VatTuEntity vatTuEntity = vatTuRepository.findById(id).get();
+        if (!vatTuEntity.getCtpns().isEmpty()) {
+            throw new RuntimeException("Vật tư đang được sử dụng (trong phiếu nhập)");
+        }
+        if (!vatTuEntity.getCtpxs().isEmpty()) {
+            throw new RuntimeException("Vật tư đang được sử dụng (trong phiếu xuất)");
+        }
+        vatTuRepository.deleteById(id);
+    }
 }

@@ -43,9 +43,14 @@ public class KhoController {
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Response> insert(@PathVariable  String id) {
-        repository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("Xóa thành công", 200, repository.findById(id)));
+        try {
+            allServices.deleteKho(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response("Xóa thành công", 200, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new Response(e.getMessage(), 400, null));
+        }
     }
     @PutMapping("/edit/{id}")
     public ResponseEntity<Response> updateCategory(@PathVariable String id, @RequestBody KhoEntity data) {
