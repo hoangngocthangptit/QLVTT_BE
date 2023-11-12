@@ -47,7 +47,7 @@ public class PhieuNhapResponse {
             newCTPNRequest1.setSoLuong(ctpnEntity.getSoluong());
             newCTPNRequest1.setDonGia(ctpnEntity.getDongia());
             this.ctpn.add(newCTPNRequest1);
-            sumPrice += ctpnEntity.getDongia();
+            sumPrice += ctpnEntity.getDongia()*ctpnEntity.getSoluong();
             total += ctpnEntity.getSoluong();
         }
         this.totalValue = sumPrice;

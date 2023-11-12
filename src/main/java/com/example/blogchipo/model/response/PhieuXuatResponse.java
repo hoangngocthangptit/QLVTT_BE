@@ -49,7 +49,7 @@ public class PhieuXuatResponse {
             newCTPXRequest.setSoLuong(ctpxEntity.getSoluong());
             newCTPXRequest.setDonGia(ctpxEntity.getDongia());
             this.ctpx.add(newCTPXRequest);
-            sum += ctpxEntity.getDongia();
+            sum += ctpxEntity.getDongia()*ctpxEntity.getSoluong();
             total += ctpxEntity.getSoluong();
         }
         this.totalValue = sum;
