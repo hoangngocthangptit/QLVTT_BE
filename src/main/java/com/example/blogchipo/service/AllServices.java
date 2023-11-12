@@ -5,14 +5,14 @@ import com.example.blogchipo.model.request.NewCTPNRequest;
 import com.example.blogchipo.model.request.NewCTPXRequest;
 import com.example.blogchipo.model.request.NewPhieuNhapRequest;
 import com.example.blogchipo.model.request.NewPhieuXuatRequest;
-import com.example.blogchipo.model.response.KhoResponse;
-import com.example.blogchipo.model.response.PhieuNhapResponse;
-import com.example.blogchipo.model.response.PhieuXuatResponse;
+import com.example.blogchipo.model.response.*;
 import com.example.blogchipo.repository.*;
 import com.example.blogchipo.until.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -256,5 +256,56 @@ public class AllServices {
             throw new RuntimeException("Vật tư đang được sử dụng (trong phiếu xuất)");
         }
         vatTuRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ThongKeNhapXuatResponse> thongKeNhapXuat() {
+        List<ThongKeNhapXuatResponse> thongKeNhapXuatResponse = new ArrayList<>();
+        List<Object[]> result = phieuNhapRepository.thongKeNhapXuat();
+        for (Object[] objects: result) {
+            String maVT = (String) objects[0];
+            Integer soLuongNhap = (Integer) objects[1];
+            Integer soLuongXuat = (Integer) objects[2];
+            Integer tongDonGiaNhap = (Integer) objects[3];
+            Integer tongDonGiaXuat = (Integer) objects[4];
+            String tenVT = (String) objects[5];
+            thongKeNhapXuatResponse.add(new ThongKeNhapXuatResponse(maVT, tenVT, soLuongNhap, soLuongXuat, tongDonGiaNhap, tongDonGiaXuat));
+        }
+        return thongKeNhapXuatResponse;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ThongKeNhapXuatResponse> thongKeNhapXuatChiNhanh(String maCN) {
+        List<ThongKeNhapXuatResponse> thongKeNhapXuatResponse = new ArrayList<>();
+        List<Object[]> result = phieuNhapRepository.thongKeNhapXuatChiNhanh(maCN);
+        for (Object[] objects: result) {
+            String maVT = (String) objects[0];
+            Integer soLuongNhap = (Integer) objects[1];
+            Integer soLuongXuat = (Integer) objects[2];
+            Integer tongDonGiaNhap = (Integer) objects[3];
+            Integer tongDonGiaXuat = (Integer) objects[4];
+            String tenVT = (String) objects[5];
+            thongKeNhapXuatResponse.add(new ThongKeNhapXuatResponse(maVT, tenVT, soLuongNhap, soLuongXuat, tongDonGiaNhap, tongDonGiaXuat));
+        }
+        return thongKeNhapXuatResponse;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ThongKeNhapXuatKhoTheoNgayResponse> thongKeNhapXuatKhoTheoNgay() {
+        List<ThongKeNhapXuatKhoTheoNgayResponse> thongKeNhapXuatKhoTheoNgayResponses = new ArrayList<>();
+        List<Object[]> result = phieuNhapRepository.thongKeNhapXuatKhoTheoNgay();
+        for (Object[] objects: result) {
+            String maKho = (String) objects[0];
+            String tenKho = (String) objects[1];
+            java.sql.Date ngay = (java.sql.Date) objects[2];
+            Integer tongDonGiaNhap = (Integer) objects[3];
+            Integer tongSoLuongNhap = (Integer) objects[4];
+            Integer tongDonGiaXuat = (Integer) objects[5];
+            Integer tongSoLuongXuat = (Integer) objects[6];
+            String chiNhanh = (String) objects[7];
+            thongKeNhapXuatKhoTheoNgayResponses.add(new ThongKeNhapXuatKhoTheoNgayResponse(maKho, tenKho, ngay,
+                    tongDonGiaNhap, tongSoLuongNhap, tongDonGiaXuat, tongSoLuongXuat, chiNhanh));
+        }
+        return thongKeNhapXuatKhoTheoNgayResponses;
     }
 }
