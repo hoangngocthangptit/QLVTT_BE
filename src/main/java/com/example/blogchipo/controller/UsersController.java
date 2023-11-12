@@ -1,8 +1,11 @@
 package com.example.blogchipo.controller;
 
+import com.example.blogchipo.entity.ChiNhanhEntity;
 import com.example.blogchipo.entity.Users;
+import com.example.blogchipo.repository.ChiNhanhRepository;
 import com.example.blogchipo.repository.UsersRepository;
 import com.example.blogchipo.response.Response;
+import com.example.blogchipo.response.UserDTO;
 import com.example.blogchipo.response.UsersDetailRes;
 import com.example.blogchipo.service.UserService;
 import com.example.blogchipo.until.JwtGenerator;
@@ -13,8 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 //@RequestMapping("/user")
@@ -26,6 +31,8 @@ public class UsersController {
     private UserService userServices;
     @Autowired
     private JwtGenerator generate;
+    @Autowired
+    private ChiNhanhRepository chiNhanhRepository;
     @Autowired
     private BCryptPasswordEncoder encryption;
     @PostMapping("/registration")
@@ -76,8 +83,10 @@ public class UsersController {
     @GetMapping("User/getAll")
     public ResponseEntity<Response> getAll() {
         List<Users> users = (List<Users>) repository.findAll();
+        List<UserDTO> userDTOList = users.stream().map(info -> new UserDTO(info.getUserId(),info.getHoTen(), info.getMaNV(), info.getEmail(),info.getSdt(),info.isTrangThai(), info.getRole(),
+                info.getMaCN().getMaCN(),info.getMaCN().getChiNhanh(), info.getPassword())).collect(Collectors.toList());;
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new Response("set isVerified", 200, users));
+                .body(new Response("set isVerified", 200, userDTOList));
     }
 
     @GetMapping("DetailUser/{userId}")
@@ -87,12 +96,14 @@ public class UsersController {
                 .body(new Response("detail", 200, user));
     }
     @PutMapping("user/edit/{userId}")
-    public ResponseEntity<Response> editUser(@RequestBody Users info, @PathVariable long userId) {
+    public ResponseEntity<Response> editUser(@RequestBody UserDTO info, @PathVariable long userId) {
         Users user = repository.findById(userId).get();
         user.setRole(info.getRole());
         user.setTrangThai(info.isTrangThai());
         user.setHoTen(info.getHoTen());
         user.setSdt(info.getSdt());
+        ChiNhanhEntity cn = chiNhanhRepository.findByMaCN(info.getMaCN());
+        user.setMaCN(cn);
         if(info.getPassword().length() <15 && !info.getPassword().isEmpty() ){
             String epassword = encryption.encode(info.getPassword());
             // setting the some extra information and encrypting the password
