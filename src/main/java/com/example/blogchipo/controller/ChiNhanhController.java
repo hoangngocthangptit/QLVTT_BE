@@ -46,7 +46,7 @@ public class ChiNhanhController {
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(new Response("Xóa thành công", 200, null));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(new Response(e.getMessage(), 400, null));
         }
     }
