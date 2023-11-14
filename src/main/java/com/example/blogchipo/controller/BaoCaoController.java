@@ -31,4 +31,16 @@ public class BaoCaoController {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new Response("thành công", 200, allServices.thongKeNhapXuatKhoTheoNgay()));
     }
+
+    @GetMapping("/thong-ke-nhap-theo-thang")
+    public ResponseEntity<Response> thongKeNhapTheoThang() {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new Response("thành công", 200, allServices.thongKeNhapTheoThang()));
+    }
+
+    @GetMapping("/thong-ke-xuat-theo-thang")
+    public ResponseEntity<Response> thongKeXuatTheoThang() {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new Response("thành công", 200, allServices.thongKeXuatTheoThang()));
+    }
 }

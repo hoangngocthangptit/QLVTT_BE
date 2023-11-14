@@ -27,4 +27,10 @@ public interface PhieuNhapRepository extends JpaRepository<PhieuNhapEntity, Stri
 
     @Procedure(procedureName = "sp_ThongKeNhapXuatKhoTheoNgay")
     List<Object[]> thongKeNhapXuatKhoTheoNgay();
+
+    @Procedure(procedureName = "sp_ThongKeNhapTheoThang")
+    List<Object[]> thongKeNhapTheoThang();
+
+    @Procedure(procedureName = "sp_ThongKeXuatTheoThang")
+    List<Object[]> thongKeXuatTheoThang();
 }

@@ -308,4 +308,32 @@ public class AllServices {
         }
         return thongKeNhapXuatKhoTheoNgayResponses;
     }
+
+    @Transactional(readOnly = true)
+    public List<ThongKeNhapTheoThangResponse> thongKeNhapTheoThang() {
+        List<ThongKeNhapTheoThangResponse> thongKeNhapTheoThangResponses = new ArrayList<>();
+        List<Object[]> result = phieuNhapRepository.thongKeNhapTheoThang();
+        for (Object[] objects: result) {
+            Integer soLuongNhap = (Integer) objects[0];
+            Integer tongDonGiaNhap = (Integer) objects[1];
+            Integer thang = (Integer) objects[2];
+            Integer nam = (Integer) objects[3];
+            thongKeNhapTheoThangResponses.add(new ThongKeNhapTheoThangResponse(soLuongNhap, tongDonGiaNhap, thang, nam));
+        }
+        return thongKeNhapTheoThangResponses;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ThongKeXuatTheoThangResponse> thongKeXuatTheoThang() {
+        List<ThongKeXuatTheoThangResponse> thongKeXuatTheoThangResponses = new ArrayList<>();
+        List<Object[]> result = phieuNhapRepository.thongKeXuatTheoThang();
+        for (Object[] objects: result) {
+            Integer soLuongXuat = (Integer) objects[0];
+            Integer tongDonGiaXuat = (Integer) objects[1];
+            Integer thang = (Integer) objects[2];
+            Integer nam = (Integer) objects[3];
+            thongKeXuatTheoThangResponses.add(new ThongKeXuatTheoThangResponse(soLuongXuat, tongDonGiaXuat, thang, nam));
+        }
+        return thongKeXuatTheoThangResponses;
+    }
 }
