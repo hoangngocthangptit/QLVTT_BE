@@ -11,11 +11,11 @@ SELECT
 FROM
 (SELECT MaVT, SUM(SoLuongNhap) AS SoLuongNhap, SUM(SoLuongXuat) AS SoLuongXuat, SUM(TongDonGiaNhap) AS TongDonGiaNhap, SUM(TongDonGiaXuat) AS TongDonGiaXuat
 FROM (
-	SELECT MaVT, SUM(SoLuong) AS SoLuongNhap, 0 AS SoLuongXuat, SUM(DONGIA) AS TongDonGiaNhap, 0 AS TongDonGiaXuat
+	SELECT MaVT, SUM(CTPN.SoLuong) AS SoLuongNhap, 0 AS SoLuongXuat, SUM(CTPN.DONGIA * CTPN.SoLuong) AS TongDonGiaNhap, 0 AS TongDonGiaXuat
 	FROM CTPN
 	GROUP BY MaVT
 	UNION
-	SELECT MaVT, 0 AS SoLuongNhap, SUM(SoLuong) AS SoLuongXuat, 0 AS TongDonGiaNhap, SUM(DONGIA) AS TongDonGiaXuat
+	SELECT MaVT, 0 AS SoLuongNhap, SUM(CTPX.SoLuong) AS SoLuongXuat, 0 AS TongDonGiaNhap, SUM(CTPX.DONGIA * CTPX.SoLuong) AS TongDonGiaXuat
 	FROM CTPX
 	GROUP BY MaVT
 ) AS T1
@@ -36,16 +36,16 @@ SELECT
 FROM
 (SELECT MaVT, SUM(SoLuongNhap) AS SoLuongNhap, SUM(SoLuongXuat) AS SoLuongXuat, SUM(TongDonGiaNhap) AS TongDonGiaNhap, SUM(TongDonGiaXuat) AS TongDonGiaXuat
 FROM (
-	SELECT MaVT, SUM(SoLuong) AS SoLuongNhap, 0 AS SoLuongXuat, SUM(DONGIA) AS TongDonGiaNhap, 0 AS TongDonGiaXuat
+	SELECT MaVT, SUM(CTPN.SoLuong) AS SoLuongNhap, 0 AS SoLuongXuat, SUM(CTPN.DONGIA * CTPN.SoLuong) AS TongDonGiaNhap, 0 AS TongDonGiaXuat
 	FROM CTPN
 	INNER JOIN PhieuNhap ON CTPN.MaPN = PhieuNhap.MaPN
-	WHERE PhieuNhap.MaKho IN (SELECT Makho FROM Kho WHERE maCN = maCN)
+	WHERE PhieuNhap.MaKho IN (SELECT Makho FROM Kho WHERE maCN = @maCN)
 	GROUP BY MaVT
 	UNION
-	SELECT MaVT, 0 AS SoLuongNhap, SUM(SoLuong) AS SoLuongXuat, 0 AS TongDonGiaNhap, SUM(DONGIA) AS TongDonGiaXuat
+	SELECT MaVT, 0 AS SoLuongNhap, SUM(CTPX.SoLuong) AS SoLuongXuat, 0 AS TongDonGiaNhap, SUM(CTPX.DONGIA * CTPX.SoLuong) AS TongDonGiaXuat
 	FROM CTPX
 	INNER JOIN PhieuXuat ON CTPX.MaPX = PhieuXuat.MaPX
-	WHERE PhieuXuat.MaKho IN (SELECT Makho FROM Kho WHERE maCN = maCN)
+	WHERE PhieuXuat.MaKho IN (SELECT Makho FROM Kho WHERE maCN = @maCN)
 	GROUP BY MaVT
 ) AS T1
 GROUP BY MaVT) T2
@@ -55,7 +55,7 @@ END
 CREATE PROC sp_ThongKeNhapXuatKhoTheoNgay 
 AS
 BEGIN
-SELECT 
+SELECT
 	T2.MaKho,
 	Kho.TenKho,
 	T2.Ngay,
@@ -66,19 +66,19 @@ SELECT
 	ChiNhanh.ChiNhanh
 FROM
 (
-	SELECT 
+	SELECT
 		T1.MaKho, T1.Ngay, SUM(T1.TongDonGiaNhap) AS TongDonGiaNhap, SUM(T1.TongSoLuongNhap) AS TongSoLuongNhap,
 		SUM(T1.TongDonGiaXuat) AS TongDonGiaXuat, SUM(T1.TongSoLuongXuat) AS TongSoLuongXuat
 	FROM
 	(
-		SELECT 
-			px.MaKho, px.Ngay, 0 AS TongDonGiaNhap, SUM(CTPX.DONGIA) AS TongDonGiaXuat, 
+		SELECT
+			px.MaKho, px.Ngay, 0 AS TongDonGiaNhap, SUM(CTPX.DONGIA * CTPX.SOLUONG) AS TongDonGiaXuat,
 			0 AS TongSoLuongNhap, SUM(CTPX.SOLUONG) AS TongSoLuongXuat
 		FROM PhieuXuat px
 		INNER JOIN CTPX ON px.MaPX = CTPX.MaPX
 		GROUP BY px.MaKho, px.Ngay
 		UNION
-		SELECT pn.MaKho, pn.Ngay, SUM(CTPN.DONGIA) AS TongDonGiaNhap, 0 AS TongDonGiaXuat, 
+		SELECT pn.MaKho, pn.Ngay, SUM(CTPN.DONGIA * CTPN.SOLUONG) AS TongDonGiaNhap, 0 AS TongDonGiaXuat,
 			SUM(CTPN.SOLUONG) AS TongSoLuongNhap, 0 AS TongSoLuongXuat
 		FROM PhieuNhap pn
 		INNER JOIN CTPN ON pn.MaPN = CTPN.MaPN
@@ -93,7 +93,7 @@ END
 CREATE PROC sp_ThongKeNhapTheoThang 
 AS
 BEGIN
-SELECT CAST(SUM(CTPN.SoLuong) AS int) AS SoLuongNhap, CAST(SUM(CTPN.DONGIA) AS int) AS TongDonGiaNhap, 
+SELECT CAST(SUM(CTPN.SoLuong) AS int) AS SoLuongNhap, CAST(SUM(CTPN.DONGIA * CTPN.SOLUONG) AS int) AS TongDonGiaNhap,
 		CAST(MONTH(PhieuNhap.Ngay) AS int) AS Thang, CAST(YEAR(PhieuNhap.Ngay) AS int) AS Nam 
 FROM CTPN
 INNER JOIN PhieuNhap ON CTPN.MaPN = PhieuNhap.MaPN
@@ -103,7 +103,7 @@ END
 CREATE PROC sp_ThongKeXuatTheoThang
 AS
 BEGIN
-SELECT CAST(SUM(CTPX.SoLuong) AS int) AS SoLuongXuat, CAST(SUM(CTPX.DONGIA) AS int) AS TongDonGiaXuat, 
+SELECT CAST(SUM(CTPX.SoLuong) AS int) AS SoLuongXuat, CAST(SUM(CTPX.DONGIA * CTPX.SOLUONG) AS int) AS TongDonGiaXuat,
 		CAST(MONTH(PhieuXuat.Ngay) AS int) AS Thang, CAST(YEAR(PhieuXuat.Ngay) AS int) AS Nam
 FROM CTPX
 INNER JOIN PhieuXuat ON CTPX.MaPX = PhieuXuat.MaPX
