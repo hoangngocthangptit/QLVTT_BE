@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PhieuXuatResponse {
-    @JsonProperty("maPN")
-    private String maPN;
+    @JsonProperty("maPX")
+    private String maPX;
     @JsonProperty("ngay")
     private String ngay;
     @JsonProperty("maKho")
@@ -36,7 +36,7 @@ public class PhieuXuatResponse {
     private List<NewCTPXRequest> ctpx = new ArrayList<>();
 
     public PhieuXuatResponse(PhieuXuatEntity phieuXuatEntity, String tenKho) {
-        this.maPN = phieuXuatEntity.getMaPX();
+        this.maPX = phieuXuatEntity.getMaPX();
         this.ngay = phieuXuatEntity.getNgay().toString();
         this.maKho = phieuXuatEntity.getMaKho();
         this.tenKho = tenKho;
